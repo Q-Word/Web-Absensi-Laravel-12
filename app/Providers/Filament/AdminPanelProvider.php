@@ -56,10 +56,6 @@ class AdminPanelProvider extends PanelProvider
             ])
             
             ->sidebarCollapsibleOnDesktop()
-
-            ->plugins([
-                \BezhanSalleh\FilamentShield\FilamentShieldPlugin::make(),
-            ])
             ;
             
     }
