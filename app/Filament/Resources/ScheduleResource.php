@@ -13,6 +13,8 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
+use Illuminate\Support\Facades\Auth;
+
 class ScheduleResource extends Resource
 {
     protected static ?string $model = Schedule::class;
@@ -40,21 +42,32 @@ class ScheduleResource extends Resource
                     ->relationship('office', 'name')
                     ->searchable()
                     ->required(),
+                Forms\Components\Toggle::make('is_wfa'),
             ]);
     }
 
     public static function table(Table $table): Table
     {
         return $table
+            ->modifyQueryUsing(function (Builder $query) {
+                $is_super_admin = auth()->user()->hasRole('super_admin');
+                if (!$is_super_admin) {
+                    $query->where('user_id', auth()->id());
+                }
+            })
             ->columns([
                 Tables\Columns\TextColumn::make('user.name')
-                    ->numeric()
                     ->sortable(),
+                Tables\Columns\BooleanColumn::make('is_wfa')
+                    ->label('Status WFA')
+                    ->trueIcon('heroicon-o-check-circle')
+                    ->falseIcon('heroicon-o-x-circle')
+                    ->sortable()
+                    ->toggleable(),
                 Tables\Columns\TextColumn::make('shift.name')
-                    ->numeric()
-                    ->sortable(),
+                    ->sortable()
+                    ->description(fn (Schedule $record) => $record->shift->start_time . ' - ' . $record->shift->end_time),
                 Tables\Columns\TextColumn::make('office.name')
-                    ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()

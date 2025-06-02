@@ -13,6 +13,8 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
+use Humaidem\FilamentMapPicker\Fields\OSMMap;
+
 class OfficeResource extends Resource
 {
     protected static ?string $model = Office::class;
@@ -37,10 +39,38 @@ class OfficeResource extends Resource
                 Forms\Components\TextInput::make('longitude')
                     ->required()
                     ->numeric(),
-                    Forms\Components\TextInput::make('radius')
+                Forms\Components\TextInput::make('radius')
                     ->required()
                     ->numeric()
                     ->default(100),
+                OSMMap::make('location')
+                ->label('Location')
+                ->showMarker()
+                ->draggable()
+                ->extraControl([
+                    'zoomDelta'           => 1,
+                    'zoomSnap'            => 0.25,
+                    'wheelPxPerZoomLevel' => 60
+                ])
+                // tiles url (refer to https://www.spatialbias.com/2018/02/qgis-3.0-xyz-tile-layers/)
+                ->tilesUrl('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}')
+                ->afterStateHydrated(function (Forms\Get $get, Forms\Set $set, $record){
+                    $latitude = $record->latitude;
+                    $longitude = $record->longitude;
+
+                    if ($latitude && $longitude) {
+                        $set('location', [
+                            'lat' => $latitude,
+                            'lng' => $longitude,
+                        ]);
+                    }
+                })
+                ->afterStateUpdated(function (Forms\Get $get, Forms\Set $set, $state) {
+                    if (isset($state['lat']) && isset($state['lng'])) {
+                        $set('latitude', $state['lat']);
+                        $set('longitude', $state['lng']);
+                    }
+                }),
             ]);
     }
 
