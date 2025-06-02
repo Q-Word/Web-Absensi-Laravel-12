@@ -37,7 +37,7 @@ class OfficeResource extends Resource
                 Forms\Components\TextInput::make('longitude')
                     ->required()
                     ->numeric(),
-                Forms\Components\TextInput::make('radius')
+                    Forms\Components\TextInput::make('radius')
                     ->required()
                     ->numeric()
                     ->default(100),
