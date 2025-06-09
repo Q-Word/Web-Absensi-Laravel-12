@@ -15,10 +15,31 @@
     <flux:separator class="my-2" />
     <div class="flex md:flex-row flex-col w-[100%]">
       <div class="bg-teal-500 w-full">
-        <div id="map" class="bg-blue-700 h-96" wire:ignore>
+        <div id="map" class= "h-96" wire:ignore>
   
         </div>
-        @if ($insideRadius)
+        {{-- Alert --}}
+        @if ($insideRadius === null)
+          <div class="bg-yellow-50 border border-s-4 border-yellow-200 text-sm text-yellow-800 p-4 dark:bg-yellow-950 dark:border-yellow-900 dark:text-yellow-500" role="alert" tabindex="-1" aria-labelledby="hs-with-description-label">
+            <div class="flex">
+              <div class="shrink-0">
+                <svg class="shrink-0 size-4 mt-0.5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"></path>
+                  <path d="M12 9v4"></path>
+                  <path d="M12 17h.01"></path>
+                </svg>
+              </div>
+              <div class="ms-4">
+                <h3 id="hs-with-description-label" class="text-sm font-semibold">
+                  Silahkan Submit Lokasi Anda
+                </h3>
+                <div class="mt-1 text-sm text-yellow-700">
+                  Pastikan Anda Berada di Lingkungan Kantor.
+                </div>
+              </div>
+            </div>
+          </div>
+        @elseif ($insideRadius === true)
           <div class="bg-teal-50 border-s-4 border-teal-500 p-4 dark:bg-teal-800/30" role="alert" tabindex="-1" aria-labelledby="hs-bordered-success-style-label">
             <div class="flex">
               <div class="shrink-0">
@@ -41,23 +62,26 @@
               </div>
             </div>
           </div>
-        @else
-          <div class="bg-yellow-50 border-s-4 border-yellow-200 text-sm text-yellow-800 p-4 dark:bg-yellow-800/10 dark:border-yellow-900 dark:text-yellow-500" role="alert" tabindex="-1" aria-labelledby="hs-with-description-label">
+        @elseif ($insideRadius === false)
+          <div class="bg-red-50 border-s-4 border-red-500 p-4 dark:bg-red-800" role="alert" tabindex="-1" aria-labelledby="hs-bordered-red-style-label">
             <div class="flex">
               <div class="shrink-0">
-                <svg class="shrink-0 size-4 mt-0.5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"></path>
-                  <path d="M12 9v4"></path>
-                  <path d="M12 17h.01"></path>
-                </svg>
+                <!-- Icon -->
+                <span class="inline-flex justify-center items-center size-8 rounded-full border-4 border-red-100 bg-red-200 text-red-800 dark:border-red-900 dark:bg-red-800 dark:text-red-400">
+                  <svg class="shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M18 6 6 18"></path>
+                    <path d="m6 6 12 12"></path>
+                  </svg>
+                </span>
+                <!-- End Icon -->
               </div>
-              <div class="ms-4">
-                <h3 id="hs-with-description-label" class="text-sm font-semibold">
-                  Silahkan Submit Lokasi Anda
+              <div class="ms-3">
+                <h3 id="hs-bordered-red-style-label" class="text-gray-800 font-semibold dark:text-white">
+                  Error!
                 </h3>
-                <div class="mt-1 text-sm text-yellow-700">
-                  Pastikan Anda Berada di Lingkungan Kantor.
-                </div>
+                <p class="text-sm text-gray-700 dark:text-neutral-200">
+                  Anda Berada di Luar Radius Absensi.
+                </p>
               </div>
             </div>
           </div>
@@ -124,7 +148,8 @@
           if (isWithinRadius(lat, lng, office, radius)){
             component.set('insideRadius', true);
           } else {
-            alert('Luar Radius');
+            component.set('insideRadius', false);
+            // alert('Luar Radius');
           }
         });
       } else {

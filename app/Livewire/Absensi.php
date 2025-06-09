@@ -10,7 +10,7 @@ class Absensi extends Component
 {
     public $latitude;
     public $longitude;
-    public $insideRadius = false;
+    public $insideRadius = null;
     public function render()
     {
         $schedule = Schedule::where('user_id', Auth::user()->id)->first();
