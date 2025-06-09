@@ -57,7 +57,7 @@
                   Lokasi Valid.
                 </h3>
                 <p class="text-sm text-gray-700 dark:text-neutral-100">
-                  Silahkan Melanjutkan Proses absensi.
+                  Anda Berada di Lingkungan Kantor. Silahkan Melanjutkan Proses absensi.
                 </p>
               </div>
             </div>
@@ -80,7 +80,7 @@
                   Error!
                 </h3>
                 <p class="text-sm text-gray-700 dark:text-neutral-200">
-                  Anda Berada di Luar Radius Absensi.
+                  Anda Berada di Luar Radius Absensi!.
                 </p>
               </div>
             </div>
@@ -96,10 +96,12 @@
           <flux:text color="amber">({{ $schedule->shift->start_time }} - {{ $schedule->shift->end_time }})</flux:text>
         </div>
         <div class="flex gap-2 flex-col sm:flex-row">
-          <flux:button type="button" icon="map-pin" id="btnTagLocation" class="w-full bg-amber-500! hover:bg-amber-400!">Submit Lokasi</flux:button>
-          @if ($insideRadius)
-            <flux:button type="button" icon="check-badge" class="w-full bg-green-500! hover:bg-green-400!">Submit Absensi</flux:button>
-          @endif
+          <form wire:submit='store' enctype="multipart/form-data" class="flex gap-2 w-full">
+            <flux:button type="button" icon="map-pin" id="btnTagLocation" class="w-full bg-amber-500! hover:bg-amber-400!">Submit Lokasi</flux:button>
+            @if ($insideRadius)
+            <flux:button type="button" wire:click="store" icon="check-badge" class="w-full bg-green-500! hover:bg-green-400!">Submit Absensi</flux:button>
+            @endif
+          </form>
         </div>
       </div>
     </div>
@@ -147,6 +149,8 @@
 
           if (isWithinRadius(lat, lng, office, radius)){
             component.set('insideRadius', true);
+            cxomponent.set('latitude', lat);
+            cxomponent.set('longitude', lng);
           } else {
             component.set('insideRadius', false);
             // alert('Luar Radius');
@@ -177,8 +181,13 @@
     });
 
     function isWithinRadius(lat, lng, center, radius) {
-      let distance = map.distance([lat, lng], center);
-      return distance <= radius;
+      const is_wfa = {{ $schedule->is_wfa }};
+      if (is_wfa){
+        return true;
+      } else{
+        let distance = map.distance([lat, lng], center);
+        return distance <= radius;
+      }
     }
   </script>
 </div>
