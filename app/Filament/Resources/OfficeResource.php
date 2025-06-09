@@ -55,14 +55,16 @@ class OfficeResource extends Resource
                 // tiles url (refer to https://www.spatialbias.com/2018/02/qgis-3.0-xyz-tile-layers/)
                 ->tilesUrl('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}')
                 ->afterStateHydrated(function (Forms\Get $get, Forms\Set $set, $record){
-                    $latitude = $record->latitude;
-                    $longitude = $record->longitude;
-
-                    if ($latitude && $longitude) {
-                        $set('location', [
-                            'lat' => $latitude,
-                            'lng' => $longitude,
-                        ]);
+                    if (isset($record)){
+                        $latitude = $record->latitude;
+                        $longitude = $record->longitude;
+    
+                        if ($latitude && $longitude) {
+                            $set('location', [
+                                'lat' => $latitude,
+                                'lng' => $longitude,
+                            ]);
+                        }
                     }
                 })
                 ->afterStateUpdated(function (Forms\Get $get, Forms\Set $set, $state) {

@@ -14,9 +14,6 @@ class ListSchedules extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
-            Action::make('absensi')
-                ->url(route('absensi'))
-                ->color('warning'),
             Actions\CreateAction::make(),
         ];
     }
