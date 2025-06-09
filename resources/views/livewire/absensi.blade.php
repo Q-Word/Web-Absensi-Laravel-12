@@ -149,8 +149,8 @@
 
           if (isWithinRadius(lat, lng, office, radius)){
             component.set('insideRadius', true);
-            cxomponent.set('latitude', lat);
-            cxomponent.set('longitude', lng);
+            component.set('latitude', lat);
+            component.set('longitude', lng);
           } else {
             component.set('insideRadius', false);
             // alert('Luar Radius');
