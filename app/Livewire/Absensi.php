@@ -17,8 +17,8 @@ class Absensi extends Component
     {
         $schedule = Schedule::where('user_id', Auth::user()->id)->first();
         $attendance = Attendance::where('user_id', Auth::user()->id)
-                            ->whereDate('created_at', Carbon::today()->toDateString())
-                            ->first();
+            ->whereDate('created_at', Carbon::today()->toDateString())
+            ->first();
         return view('livewire.absensi', [
             'schedule' => $schedule,
             'insideRadius' => $this->insideRadius,
@@ -37,20 +37,20 @@ class Absensi extends Component
 
         if ($schedule) {
             $attendance = Attendance::where('user_id', Auth::user()->id)
-                            ->whereDate('created_at', Carbon::today()->toDateString())
-                            ->first();
+                ->whereDate('created_at', Carbon::today()->toDateString())
+                ->first();
             if (!$attendance) {
                 $attendance = Attendance::create([
-                'user_id' => Auth::user()->id,
-                'schedule_latitude' => $schedule->office->latitude,
-                'schedule_longitude' => $schedule->office->longitude,
-                'schedule_start_time' => $schedule->shift->start_time,
-                'schedule_end_time' => $schedule->shift->end_time,
-                'start_latitude' => $this->latitude,
-                'start_longitude' => $this->longitude,
-                'start_time' => Carbon::now()->toTimeString(),
-                'end_time' => Carbon::now()->toTimeString()
-            ]);
+                    'user_id' => Auth::user()->id,
+                    'schedule_latitude' => $schedule->office->latitude,
+                    'schedule_longitude' => $schedule->office->longitude,
+                    'schedule_start_time' => $schedule->shift->start_time,
+                    'schedule_end_time' => $schedule->shift->end_time,
+                    'start_latitude' => $this->latitude,
+                    'start_longitude' => $this->longitude,
+                    'start_time' => Carbon::now()->toTimeString(),
+                    'end_time' => Carbon::now()->toTimeString()
+                ]);
             } else {
                 $attendance->update([
                     'end_latitude' => $this->latitude,

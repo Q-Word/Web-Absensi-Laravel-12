@@ -20,7 +20,7 @@
     }
   </style>
 </head>
-<body>
+<body class="dark:bg-black">
   {{ $slot }}
   @fluxScripts
 

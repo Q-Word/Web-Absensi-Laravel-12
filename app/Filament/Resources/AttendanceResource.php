@@ -80,6 +80,17 @@ class AttendanceResource extends Resource
                     ->numeric()
                     ->sortable()
                     ->searchable(),
+                Tables\Columns\TextColumn::make('status')
+                    ->label('Status')
+                    ->getStateUsing(function ($record) {
+                        return $record->statusHadir();
+                    })
+                    ->badge()
+                    ->color(fn(String $state): String => match ($state) {
+                        'Tepat Waktu' => 'success',
+                        'Terlambat' => 'warning',
+                        'Tidak Hadir' => 'danger',
+                    }),
                 Tables\Columns\TextColumn::make('schedule_latitude')
                     ->numeric()
                     ->sortable()
@@ -115,6 +126,7 @@ class AttendanceResource extends Resource
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
+            ->defaultSort('created_at', 'desc')
             ->filters([
                 //
             ])
