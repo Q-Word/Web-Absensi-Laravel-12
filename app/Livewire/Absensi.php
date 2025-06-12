@@ -65,4 +65,14 @@ class Absensi extends Component
             ]);
         }
     }
+
+    public function toDashboard()
+    {
+        return redirect()->route('dashboard');
+    }
+
+    public function outFromAttendance()
+    {
+        return redirect()->route('logout');
+    }
 }

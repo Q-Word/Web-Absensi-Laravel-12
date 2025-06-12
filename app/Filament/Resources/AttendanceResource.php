@@ -133,6 +133,12 @@ class AttendanceResource extends Resource
             ->actions([
                 Tables\Actions\EditAction::make(),
             ])
+            ->groups([
+                Tables\Grouping\Group::make('created_at')
+                    ->label('Order Date')
+                    ->date()
+                    ->collapsible(),
+            ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),

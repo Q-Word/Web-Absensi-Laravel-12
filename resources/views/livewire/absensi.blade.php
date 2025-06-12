@@ -1,5 +1,5 @@
 <div class="container mx-auto justify-center max-w-4xl my-auto h-screen content-center">
-  <div class=" p-6 bg-[#F5F5F5] border border-gray-200 rounded-lg dark:bg-[#1B1B1B] dark:border-gray-700 shadow-[0px_10px_1px_rgba(221,_221,_221,_1),_0_10px_20px_rgba(204,_204,_204,_1)]">
+  <div class=" p-6 bg-[#F5F5F5] border border-gray-200 rounded-lg dark:bg-[#1B1B1B] dark:border-gray-700 shadow-[0px_10px_1px_rgba(221,_221,_221,_1),_0_10px_20px_rgba(204,_204,_204,_1)] dark:shadow-none">
     <div class="flex p-3 justify-between">
       <div class="flex gap-2 items-center">
         <flux:avatar size="lg" name="{{ Auth::user()->name }}" />
@@ -8,8 +8,24 @@
           <flux:text>{{ Auth::user()->roles[0]['name'] }}</flux:text>
         </div>
       </div>
-      <div class="content-center">
-        <flux:switch x-data x-model="$flux.dark" label="Dark mode"  />
+      <div class="items-center">
+        <flux:button.group>
+          <flux:button type="button" wire:click="toDashboard" icon:trailing="presentation-chart-line" variant="ghost" tooltip="Dashboard" class="font-bold! content-center"/>
+          <flux:dropdown x-data align="end">
+            <flux:button variant="subtle" square class="group" aria-label="Preferred color scheme">
+              <flux:icon.sun x-show="$flux.appearance === 'light'" variant="mini" class="text-zinc-500 dark:text-white" />
+              <flux:icon.moon x-show="$flux.appearance === 'dark'" variant="mini" class="text-zinc-500 dark:text-white" />
+              <flux:icon.moon x-show="$flux.appearance === 'system' && $flux.dark" variant="mini" />
+              <flux:icon.sun x-show="$flux.appearance === 'system' && ! $flux.dark" variant="mini" />
+            </flux:button>
+            <flux:menu>
+              <flux:menu.item icon="sun" x-on:click="$flux.appearance = 'light'">Light</flux:menu.item>
+              <flux:menu.item icon="moon" x-on:click="$flux.appearance = 'dark'">Dark</flux:menu.item>
+              <flux:menu.item icon="computer-desktop" x-on:click="$flux.appearance = 'system'">System</flux:menu.item>
+            </flux:menu>
+          </flux:dropdown>
+          <flux:button type="button" wire:click="outFromAttendance" icon:trailing="arrow-top-right-on-square" variant="danger" tooltip="Logout" class="font-bold! content-center"/>
+        </flux:button.group>
       </div>
     </div>
     <flux:separator class="my-2" />
