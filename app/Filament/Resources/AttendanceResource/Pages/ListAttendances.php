@@ -2,9 +2,13 @@
 
 namespace App\Filament\Resources\AttendanceResource\Pages;
 
+use App\Filament\Exports\AttendanceExporter;
 use App\Filament\Resources\AttendanceResource;
 use Filament\Actions;
 use Filament\Actions\Action;
+use Filament\Actions\ActionGroup;
+use Filament\Actions\ExportAction;
+use Filament\Actions\Exports\Enums\ExportFormat;
 use Filament\Resources\Components\Tab;
 use Filament\Resources\Pages\ListRecords;
 use Illuminate\Database\Eloquent\Collection;
@@ -21,6 +25,15 @@ class ListAttendances extends ListRecords
                 ->url(route('absensi'))
                 ->color('success'),
             Actions\CreateAction::make(),
+            ActionGroup::make([
+                ExportAction::make()
+                    ->label('Export')
+                    ->icon('heroicon-o-arrow-down-tray')
+                    ->exporter(AttendanceExporter::class)
+                    ->formats([
+                        ExportFormat::Xlsx,
+                    ]),
+                ]),
         ];
     }
 

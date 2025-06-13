@@ -24,7 +24,10 @@
               <flux:menu.item icon="computer-desktop" x-on:click="$flux.appearance = 'system'">System</flux:menu.item>
             </flux:menu>
           </flux:dropdown>
-          <flux:button type="button" wire:click="outFromAttendance" icon:trailing="arrow-top-right-on-square" variant="danger" tooltip="Logout" class="font-bold! content-center"/>
+          <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+              @csrf
+          </form>
+          <flux:button type="button" wire:click="outFromAttendance" icon:trailing="arrow-top-right-on-square" variant="danger" tooltip="Logout" class="font-bold! content-center" onclick="document.getElementById('logout-form').submit();"/>
         </flux:button.group>
       </div>
     </div>

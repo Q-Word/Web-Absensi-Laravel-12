@@ -128,7 +128,24 @@ class AttendanceResource extends Resource
             ])
             ->defaultSort('created_at', 'desc')
             ->filters([
-                //
+                Tables\Filters\SelectFilter::make('user_id')
+                    ->label('Nama Pegawai')
+                    ->relationship('user', 'name')
+                    ->searchable()
+                    ->placeholder('Semua Pegawai')
+                    ->default(null), // Tambahkan default null agar tidak wajib dipilih
+                Tables\Filters\Filter::make('created_at')
+                    ->label('Tanggal')
+                    ->form([
+                        Forms\Components\DatePicker::make('created_at')
+                            ->label('Pilih Tanggal')
+                            ->default(null), // Tambahkan default null
+                    ])
+                    ->query(function (Builder $query, array $data) {
+                        if (!empty($data['created_at'])) {
+                            $query->whereDate('created_at', $data['created_at']);
+                        }
+                    }),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
