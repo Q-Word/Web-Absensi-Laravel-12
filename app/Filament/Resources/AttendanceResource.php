@@ -64,9 +64,10 @@ class AttendanceResource extends Resource
     public static function table(Table $table): Table
     {
         $is_super_admin = auth()->user()->hasRole('super_admin');
+        $is_manager = auth()->user()->hasRole('Manager');
         return $table
-            ->modifyQueryUsing(function (Builder $query) use ($is_super_admin) {
-                if (!$is_super_admin) {
+            ->modifyQueryUsing(function (Builder $query) use ($is_super_admin, $is_manager) {
+                if (!$is_super_admin && !$is_manager) {
                     $query->where('user_id', auth()->id());
                 }
             })
@@ -132,20 +133,18 @@ class AttendanceResource extends Resource
                     ->label('Nama Pegawai')
                     ->relationship('user', 'name')
                     ->searchable()
-                    ->placeholder('Semua Pegawai')
-                    ->default(null), // Tambahkan default null agar tidak wajib dipilih
+                    ->placeholder('Semua Pegawai'),
                 Tables\Filters\Filter::make('created_at')
-                    ->label('Tanggal')
-                    ->form([
-                        Forms\Components\DatePicker::make('created_at')
-                            ->label('Pilih Tanggal')
-                            ->default(null), // Tambahkan default null
-                    ])
-                    ->query(function (Builder $query, array $data) {
-                        if (!empty($data['created_at'])) {
-                            $query->whereDate('created_at', $data['created_at']);
-                        }
-                    }),
+                        ->label('Tanggal')
+                        ->form([
+                            Forms\Components\DatePicker::make('created_at')
+                                ->label('Pilih Tanggal'),
+                        ])
+                        ->query(function (Builder $query, array $data) {
+                            if ($data['created_at']) {
+                                $query->whereDate('created_at', $data['created_at']);
+                            }
+                        }),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),

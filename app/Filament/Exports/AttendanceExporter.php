@@ -21,6 +21,10 @@ class AttendanceExporter extends Exporter
             ExportColumn::make('status')
                 ->label('Status')
                 ->getStateUsing(fn ($record) => $record->statusHadir()),
+            ExportColumn::make('start_time')
+                ->label('Jam Masuk'),
+            ExportColumn::make('end_time')
+                ->label('Jam Keluar'),
         ];
     }
 

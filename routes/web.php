@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Auth;
 Route::group(['middleware' => 'auth'], function () {
     Route::get('absensi', Absensi::class)->name('absensi');
 });
-Route::get('/logout', function () {
+Route::post('/logout', function () {
     Auth::logout();
     return redirect('/login');
 })->name('logout');

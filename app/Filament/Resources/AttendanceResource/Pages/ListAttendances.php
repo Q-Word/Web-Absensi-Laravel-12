@@ -63,7 +63,7 @@ class ListAttendances extends ListRecords
             ]
         );
     }
-
+    
     public function getTabs(): array
     {
         return [
