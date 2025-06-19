@@ -3,6 +3,7 @@
 namespace App\Livewire;
 
 use App\Models\Attendance;
+use App\Models\Leave;
 use App\Models\Schedule;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -13,17 +14,43 @@ class Absensi extends Component
     public $latitude;
     public $longitude;
     public $insideRadius = null;
+
+    public $showLeaveModal = false;
+    public $isOnLeave = false;
     public function render()
     {
         $schedule = Schedule::where('user_id', Auth::user()->id)->first();
         $attendance = Attendance::where('user_id', Auth::user()->id)
             ->whereDate('created_at', Carbon::today()->toDateString())
             ->first();
+        
+        // penyesuaian cuti
+        $today = Carbon::now()->format('Y-m-d');
+        $approvedLeave = Leave::where('user_id', Auth::user()->id)
+            ->where('status', 'approved')
+            ->whereDate('start_date', '<=', $today)
+            ->whereDate('end_date', '>=', $today)
+            ->exists();
+    
+        $this->isOnLeave = $approvedLeave;
+        $this->showLeaveModal = $approvedLeave;
+
+        // penyesuaian weeken
+        $todayIsWeekend = Carbon::now()->isWeekend();
         return view('livewire.absensi', [
             'schedule' => $schedule,
             'insideRadius' => $this->insideRadius,
-            'attendance' => $attendance
+            'attendance' => $attendance,
+            'isOnLeave' => $this->isOnLeave,
+            'showLeaveModal' => $this->showLeaveModal,
+            'todayIsWeekend' => $todayIsWeekend
         ]);
+    }
+
+    // modal peringatan cuti
+    public function closeLeaveModal()
+    {
+        $this->showLeaveModal = false;
     }
 
     public function store()
@@ -34,6 +61,16 @@ class Absensi extends Component
         ]);
 
         $schedule = Schedule::where('user_id', Auth::user()->id)->first();
+
+        $today = Carbon::now()->format('Y-m-d');
+        $approvedLeave = Leave::where('user_id', Auth::user()->id)
+            ->where('status', 'approved')
+            ->whereDate('start_date', '<=', $today)
+            ->whereDate('end_date', '>=', $today)
+            ->exists();
+        if ($approvedLeave) {
+            // 
+        }
 
         if ($schedule) {
             $attendance = Attendance::where('user_id', Auth::user()->id)

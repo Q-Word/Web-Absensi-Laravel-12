@@ -92,7 +92,8 @@ class AttendanceResource extends Resource
                         'Tepat Waktu' => 'success',
                         'Terlambat' => 'warning',
                         'Tidak Hadir' => 'danger',
-                    }),
+                    })
+                    ->description(fn($record) => $record->end_time? 'Durasi: '.$record->workDuration() : ''),
                 Tables\Columns\TextColumn::make('schedule_latitude')
                     ->numeric()
                     ->sortable()

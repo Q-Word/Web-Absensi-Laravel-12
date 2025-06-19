@@ -1,3 +1,51 @@
+@if($showLeaveModal)
+<div class="fixed z-10 inset-0 overflow-y-auto">
+    <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
+        <div class="fixed inset-0 transition-opacity">
+            <div class="absolute inset-0 bg-gray-500 opacity-75"></div>
+        </div>
+        <span class="hidden sm:inline-block sm:align-middle sm:h-screen"></span>
+        <div
+            class="inline-block align-bottom bg-white rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full sm:p-6 border border-red-400">
+            <div class="sm:flex sm:items-start">
+                <div
+                    class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 text-red-600">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z" />
+                    </svg>
+                </div>
+                <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
+                    <h3 class="text-lg leading-6 font-medium text-red-700">
+                        Peringatan: Anda Sedang Cuti
+                    </h3>
+                    <div class="mt-2">
+                        <p class="text-sm leading-5 text-gray-600">
+                            Anda sedang dalam masa cuti. Anda dapat kembali ke dashboard atau tetap di halaman absensi (namun tidak dapat submit lokasi).
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-5 sm:mt-4 sm:flex sm:flex-row-reverse">
+                <span class="flex w-full rounded-md shadow-sm sm:ml-3 sm:w-auto">
+                    <button type="button"
+                        wire:click="toDashboard"
+                        class="inline-flex justify-center w-full rounded-md border border-transparent px-4 py-2 bg-red-600 text-base leading-6 font-medium text-white shadow-sm hover:bg-red-500 focus:outline-none focus:shadow-outline-red transition ease-in-out duration-150 sm:text-sm sm:leading-5">
+                        Ke Dashboard
+                    </button>
+                </span>
+                <span class="mt-3 flex w-full rounded-md shadow-sm sm:mt-0 sm:w-auto">
+                    <button type="button"
+                        wire:click="closeLeaveModal"
+                        class="inline-flex justify-center w-full rounded-md border border-gray-300 px-4 py-2 bg-white text-base leading-6 font-medium text-gray-700 shadow-sm hover:text-gray-500 focus:outline-none focus:border-red-300 focus:shadow-outline-red transition ease-in-out duration-150 sm:text-sm sm:leading-5">
+                        Tetap di Absensi
+                    </button>
+                </span>
+            </div>
+        </div>
+    </div>
+</div>
+@endif
+
 <div class="container mx-auto justify-center max-w-4xl my-auto h-screen content-center">
   <div class=" p-6 bg-[#F5F5F5] border border-gray-200 rounded-lg dark:bg-[#1B1B1B] dark:border-gray-700 shadow-[0px_10px_1px_rgba(221,_221,_221,_1),_0_10px_20px_rgba(204,_204,_204,_1)] dark:shadow-none">
     <div class="flex p-3 justify-between">
@@ -211,7 +259,7 @@
         </div>
         <div class="flex gap-2 flex-col sm:flex-row">
           <form wire:submit='store' enctype="multipart/form-data" class="flex gap-2 w-full">
-            <flux:button type="button" icon="map-pin" id="btnTagLocation" class="w-full bg-amber-500! hover:bg-amber-400!">Submit Lokasi</flux:button>
+            <flux:button type="button" icon="map-pin" id="{{!$isOnLeave ? 'btnTagLocation': '' }}" class="w-full bg-amber-500! hover:bg-amber-400!">Submit Lokasi</flux:button>
             @if ($insideRadius)
             <flux:button type="button" wire:click="store" icon="check-badge" class="w-full bg-green-500! hover:bg-green-400!">Submit Absensi</flux:button>
             @endif

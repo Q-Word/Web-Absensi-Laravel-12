@@ -43,4 +43,20 @@ class Attendance extends Model
             return 'Terlambat';
         }
     }
+    public function workDuration(){
+        $startTime = Carbon::parse($this->start_time);
+        $endTime = Carbon::parse($this->end_time);
+        
+        // atasi kalau telat absen pulang
+        $now = Carbon::now();
+        $scheduleEndTime = Carbon::parse($this->schedule_end_time);
+        if ($endTime->lessThan($now)) {
+            $endTime = $scheduleEndTime;
+        }
+
+        $duration = $startTime->diff($endTime);
+        $hours = $duration->h;
+        $minutes = $duration->i;
+        return $hours . ' Jam ' . $minutes . ' Menit ';
+    }
 }
