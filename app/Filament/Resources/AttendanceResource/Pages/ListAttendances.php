@@ -23,7 +23,7 @@ class ListAttendances extends ListRecords
         return [
             Action::make('absensi')
                 ->url(route('absensi'))
-                ->color('success'),
+                ->color('info'),
             Actions\CreateAction::make(),
             ActionGroup::make([
                 ExportAction::make()

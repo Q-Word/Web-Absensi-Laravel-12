@@ -42,6 +42,10 @@ class RealTimeClock extends Widget
         $toleransiDatang = $start_time->subMinutes(30);
         $now = Carbon::now($this->timezone);
         $isLate = $now->greaterThan($toleransiDatang);
+
+        // tidak bisa absen sebelum waktunya
+        $allowTime = $start_time->subMinutes(-30);
+        $allowSubmit = $now->between($allowTime, $end_time);
         return [
             'date' => $this->date,
             'time' => $this->time,
@@ -51,6 +55,7 @@ class RealTimeClock extends Widget
             'toleransiDatang' => $toleransiDatang,
             'endtime' => $end_time,
             'isLate' => $isLate,
+            'allowSubmit' => $allowSubmit,
         ];
     }
 }
