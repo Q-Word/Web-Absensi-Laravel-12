@@ -17,33 +17,38 @@ class Absensi extends Component
 
     public $showLeaveModal = false;
     public $isOnLeave = false;
-    public function render()
+
+    public function mount()
     {
         $schedule = Schedule::where('user_id', Auth::user()->id)->first();
-        $attendance = Attendance::where('user_id', Auth::user()->id)
-            ->whereDate('created_at', Carbon::today()->toDateString())
-            ->first();
-        
-        // penyesuaian cuti
         $today = Carbon::now()->format('Y-m-d');
         $approvedLeave = Leave::where('user_id', Auth::user()->id)
             ->where('status', 'approved')
             ->whereDate('start_date', '<=', $today)
             ->whereDate('end_date', '>=', $today)
             ->exists();
-    
+
         $this->isOnLeave = $approvedLeave;
         $this->showLeaveModal = $approvedLeave;
+    }
 
-        // penyesuaian weeken
+    public function render()
+    {
+        $schedule = Schedule::where('user_id', Auth::user()->id)->first();
+        $attendance = Attendance::where('user_id', Auth::user()->id)
+            ->whereDate('created_at', Carbon::today()->toDateString())
+            ->first();
+        $wfa = $schedule->is_wfa ?? false;
         $todayIsWeekend = Carbon::now()->isWeekend();
+
         return view('livewire.absensi', [
             'schedule' => $schedule,
             'insideRadius' => $this->insideRadius,
             'attendance' => $attendance,
             'isOnLeave' => $this->isOnLeave,
             'showLeaveModal' => $this->showLeaveModal,
-            'todayIsWeekend' => $todayIsWeekend
+            'todayIsWeekend' => $todayIsWeekend,
+            'wfa' => $wfa
         ]);
     }
 
