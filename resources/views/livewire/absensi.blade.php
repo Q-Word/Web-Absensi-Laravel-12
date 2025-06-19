@@ -202,7 +202,7 @@
                     <div class="flex-grow flex flex-col ml-4">
                         <span class="text-base font-bold">Absensi Pulang</span>
                         <div class="flex items-center justify-between">
-                            <span class="text-gray-500 text-xs dark:text-[#c4c4c4]">{{ $attendance? $attendance->end_time : '-' }}</span>
+                            <span class="text-gray-500 text-xs dark:text-[#c4c4c4]">{{ $attendance && $attendance->end_time ? $attendance->end_time : '-' }}</span>
                         </div>
                     </div>
                 </div>

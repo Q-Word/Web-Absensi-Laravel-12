@@ -19,7 +19,7 @@ class OfficeResource extends Resource
 {
     protected static ?string $model = Office::class;
 
-    protected static ?string $navigationGroup = 'Manajemen Pengguna';
+    protected static ?string $navigationGroup = 'Schedule Management';
 
     protected static ?int $navigationSort = 2;
 

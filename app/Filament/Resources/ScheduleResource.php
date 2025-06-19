@@ -19,7 +19,7 @@ class ScheduleResource extends Resource
 {
     protected static ?string $model = Schedule::class;
 
-    protected static ?string $navigationGroup = 'Manajemen Pengguna';
+    protected static ?string $navigationGroup = 'Schedule Management';
 
     protected static ?int $navigationSort = 4;
 

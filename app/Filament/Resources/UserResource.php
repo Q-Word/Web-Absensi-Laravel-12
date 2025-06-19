@@ -18,11 +18,25 @@ class UserResource extends Resource
 {
     protected static ?string $model = User::class;
 
-    protected static ?string $navigationGroup = 'Manajemen Pengguna';
+    protected static ?string $navigationGroup = 'Account Management';
 
     protected static ?int $navigationSort = 1;
 
     protected static ?string $navigationIcon = 'heroicon-o-user-group';
+
+    public static function getEloquentQuery(): \Illuminate\Database\Eloquent\Builder
+    {
+        $query = parent::getEloquentQuery();
+
+        // Jika user bukan super_admin, sembunyikan user dengan role super_admin
+        if (!auth()->user()?->hasRole('super_admin')) {
+            $query->whereDoesntHave('roles', function ($q) {
+                $q->where('name', 'super_admin');
+            });
+        }
+
+        return $query;
+    }
 
     public static function form(Form $form): Form
     {
@@ -54,17 +68,17 @@ class UserResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('name')
-                    ->searchable(),
+                    ->searchable()
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('email')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('roles')
                     ->label('Roles')
-                    ->getStateUsing(fn (User $record) => $record->getRoleNames()->implode(', '))
-                    ->searchable()
-                    ->sortable(),
+                    ->getStateUsing(fn (User $record) => $record->getRoleNames()->implode(', ')),
                 Tables\Columns\TextColumn::make('email_verified_at')
                     ->dateTime()
-                    ->sortable(),
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()

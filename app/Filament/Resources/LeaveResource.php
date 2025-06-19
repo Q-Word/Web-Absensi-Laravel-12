@@ -18,7 +18,7 @@ class LeaveResource extends Resource
 {
     protected static ?string $model = Leave::class;
 
-    protected static ?string $navigationGroup = 'Manajemen Pengguna';
+    protected static ?string $navigationGroup = 'Pengajuan Cuti';
 
     protected static ?int $navigationSort = 6;
 
@@ -37,7 +37,8 @@ class LeaveResource extends Resource
                             ? null
                             : auth()->id()
                     )
-                    ->disabled(fn($context) => $context === 'edit' || !auth()->user()->hasRole('super_admin')),
+                    // ->disabled(fn($context) => $context === 'edit' || !auth()->user()->hasRole('super_admin'))
+                    ,
                 Forms\Components\Grid::make()
                     ->columns(2)
                     ->schema([
@@ -72,7 +73,14 @@ class LeaveResource extends Resource
 
     public static function table(Table $table): Table
     {
+        $is_super_admin = auth()->user()->hasRole('super_admin');
+        $is_manager = auth()->user()->hasRole('Manager');
         return $table
+            ->modifyQueryUsing(function (Builder $query) use ($is_super_admin, $is_manager) {
+                if (!$is_super_admin && !$is_manager) {
+                    $query->where('user_id', auth()->id());
+                }
+            })
             ->columns([
                 Tables\Columns\TextColumn::make('user.name')
                     ->searchable()
@@ -91,6 +99,8 @@ class LeaveResource extends Resource
                         'rejected' => 'danger',
                     })
                     ->description(fn(Leave $record) => $record ? 'Note: ' . $record->note : ''),
+                Tables\Columns\TextColumn::make('reason')
+                    ->label('Alasan'),
                 Tables\Columns\TextColumn::make('start_date')
                     ->date(format: 'd-m-Y')
                     ->sortable(),
@@ -110,6 +120,7 @@ class LeaveResource extends Resource
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
+            ->defaultSort('created_at', 'desc')
             ->filters([
                 //
             ])

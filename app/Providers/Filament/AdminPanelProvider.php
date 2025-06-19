@@ -2,6 +2,12 @@
 
 namespace App\Providers\Filament;
 
+use App\Filament\Widgets\AbsensiChart;
+use App\Filament\Widgets\DashboardAttendanceTable;
+use App\Filament\Widgets\DashboardLeavesTable;
+use App\Filament\Widgets\DashboardUserSchedule;
+use App\Filament\Widgets\RealTimeClock;
+use App\Filament\Widgets\StatsUser;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -37,10 +43,17 @@ class AdminPanelProvider extends PanelProvider
             ->pages([
                 Pages\Dashboard::class,
             ])
-            ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')
+            // ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')
             ->widgets([
                 Widgets\AccountWidget::class,
                 Widgets\FilamentInfoWidget::class,
+                StatsUser::class,
+                // AbsensiChart::class,
+                DashboardAttendanceTable::class,
+                DashboardLeavesTable::class,
+                RealTimeClock::class,
+                DashboardUserSchedule::class,
+                
             ])
             ->middleware([
                 EncryptCookies::class,

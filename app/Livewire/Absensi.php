@@ -49,7 +49,6 @@ class Absensi extends Component
                     'start_latitude' => $this->latitude,
                     'start_longitude' => $this->longitude,
                     'start_time' => Carbon::now()->toTimeString(),
-                    'end_time' => Carbon::now()->toTimeString()
                 ]);
             } else {
                 $attendance->update([

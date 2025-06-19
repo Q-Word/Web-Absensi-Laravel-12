@@ -17,7 +17,7 @@ class ShiftResource extends Resource
 {
     protected static ?string $model = Shift::class;
 
-    protected static ?string $navigationGroup = 'Manajemen Pengguna';
+    protected static ?string $navigationGroup = 'Schedule Management';
 
     protected static ?int $navigationSort = 3;
 

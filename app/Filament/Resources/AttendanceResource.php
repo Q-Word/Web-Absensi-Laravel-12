@@ -17,7 +17,7 @@ class AttendanceResource extends Resource
 {
     protected static ?string $model = Attendance::class;
 
-    protected static ?string $navigationGroup = 'Manajemen Pengguna';
+    protected static ?string $navigationGroup = 'Absensi';
 
     protected static ?int $navigationSort = 5;
 
@@ -76,9 +76,10 @@ class AttendanceResource extends Resource
                     ->label('Tanggal')
                     ->date()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('user.name')
+                Tables\Columns\TextColumn::make('pegawai')
                     ->label('Pegawai')
-                    ->numeric()
+                    ->getStateUsing(fn($record) => $record->user?->name)
+                    ->description(fn($record) => $record->user?->getRoleNames()->implode(', '))
                     ->sortable()
                     ->searchable(),
                 Tables\Columns\TextColumn::make('status')
@@ -101,19 +102,23 @@ class AttendanceResource extends Resource
                     ->sortable()
                     ->visible($is_super_admin),
                 Tables\Columns\TextColumn::make('schedule_start_time')
-                    ->visible($is_super_admin),
+                    ->label('Jadwal Datang'),
                 Tables\Columns\TextColumn::make('schedule_end_time')
-                    ->visible($is_super_admin),
+                    ->label('Jadwal Pulang'),
                 Tables\Columns\TextColumn::make('start_latitude')
-                    ->numeric(),
+                    ->numeric()
+                    ->visible($is_super_admin),
                 Tables\Columns\TextColumn::make('start_longitude')
-                    ->numeric(),
+                    ->numeric()
+                    ->visible($is_super_admin),
                 Tables\Columns\TextColumn::make('start_time')
                     ->label('Absen Datang'),
                 Tables\Columns\TextColumn::make('end_latitude')
-                    ->numeric(),
+                    ->numeric()
+                    ->visible($is_super_admin),
                 Tables\Columns\TextColumn::make('end_longitude')
-                    ->numeric(),
+                    ->numeric()
+                    ->visible($is_super_admin),
                 Tables\Columns\TextColumn::make('end_time')
                     ->label('Absen Pulang'),
                 Tables\Columns\TextColumn::make('updated_at')
