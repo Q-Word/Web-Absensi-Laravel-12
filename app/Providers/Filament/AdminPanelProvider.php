@@ -25,6 +25,7 @@ use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 
 use BezhanSalleh\FilamentShield\FilamentShieldPlugin;
+use Joaopaulolndev\FilamentEditProfile\FilamentEditProfilePlugin;
 
 class AdminPanelProvider extends PanelProvider
 {
@@ -73,6 +74,11 @@ class AdminPanelProvider extends PanelProvider
             ->databaseNotifications()
             ->plugins([
                 FilamentShieldPlugin::make(),
+                FilamentEditProfilePlugin::make()
+                    ->shouldShowDeleteAccountForm(false)
+                    ->setNavigationLabel('My Profile')
+                    ->setIcon('heroicon-s-user-circle')
+                    ->setTitle(fn () => 'Hello, ' . auth()->user()->name),
             ])
         ;
     }

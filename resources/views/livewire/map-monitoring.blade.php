@@ -1,7 +1,14 @@
 <div class="grid grid-cols-1 dark:bg-gray-900 md:grid-cols-12 gap-4" wire:ignore>
 
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
-
+    {{-- <form action="" class="flex w-full">
+        <select name="" id="" class="w-fit md:w-full">
+            <option value="">Semua</option>
+            <option value="Harian">Harian</option>
+            <option value="Mingguan">Mingguan</option>
+            <option value="Bulanan">Bulanan</option>
+        </select>
+    </form> --}}
     <div class="md:col-span-2 bg-white dark:bg-gray-800 shadow-md rounded-lg p-6">
         <div id="map" class="w-full" style="height: 75vh;"></div>
     </div>
