@@ -46,6 +46,9 @@ class RealTimeClock extends Widget
         // tidak bisa absen sebelum waktunya
         $allowTime = $start_time->subMinutes(-30);
         $allowSubmit = $now->between($allowTime, $end_time);
+
+        // atasi weekend
+        $todayIsWeekend = Carbon::now()->isWeekend();
         return [
             'date' => $this->date,
             'time' => $this->time,
@@ -56,6 +59,7 @@ class RealTimeClock extends Widget
             'endtime' => $end_time,
             'isLate' => $isLate,
             'allowSubmit' => $allowSubmit,
+            'todayIsWeekend' => $todayIsWeekend
         ];
     }
 }

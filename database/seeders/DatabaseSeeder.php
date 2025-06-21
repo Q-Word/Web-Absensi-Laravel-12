@@ -1,23 +1,28 @@
 <?php
+// database/seeders/DatabaseSeeder.php
 
-namespace Database\Seeders;
-
-use App\Models\User;
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use App\Models\User;
+use Illuminate\Support\Facades\Hash;
+use Spatie\Permission\Models\Role;
 
 class DatabaseSeeder extends Seeder
 {
-    /**
-     * Seed the application's database.
-     */
     public function run(): void
     {
-        // User::factory(10)->create();
+        // Buat role super_admin jika belum ada
+        $role = Role::firstOrCreate(['name' => 'super_admin']);
 
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
-        ]);
+        // Buat user super admin
+        $user = User::firstOrCreate(
+            ['email' => 'superadmin@example.com'],
+            [
+                'name' => 'Super Admin',
+                'password' => Hash::make('@PasswordSuperAdmin'), // gunakan Hash::make di sini
+            ]
+        );
+
+        // Assign role super_admin ke user
+        $user->assignRole($role);
     }
 }

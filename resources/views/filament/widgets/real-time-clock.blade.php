@@ -21,7 +21,7 @@
             </div>
             <div class="block">
                 <div class="flex flex-col items-center justify-center text-white">
-                    <a href="{{ $allowSubmit ? url('/absensi'): '#' }}" class="flex w-fit py-2 px-4 mt-6 rounded-lg gap-2" style="background: {{ !$allowSubmit ? 'oklch(44.6% 0.03 256.802)' : ($isLate ? '#dc3545' : '#007bff') }}">
+                    <a href="{{ $allowSubmit&&!$todayIsWeekend ? url('/absensi'): '#' }}" class="flex w-fit py-2 px-4 mt-6 rounded-lg gap-2" style="background: {{ !$allowSubmit||$todayIsWeekend ? 'oklch(44.6% 0.03 256.802)' : ($isLate ? '#dc3545' : '#007bff') }}">
                         <div class="flex shrink items-center justify-center h-6 w-6 rounded">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="size-12">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
@@ -29,7 +29,9 @@
                         </div>
                         <span class="font-semibold">
                             Absen Sekarang
-                            @if($isLate&&$allowSubmit)
+                            @if ($todayIsWeekend)
+                                <span class="ml-2 text-xs font-medium">(hari libur)</span>
+                            @elseif($isLate&&$allowSubmit)
                                 <span class="ml-2 text-xs font-medium">(anda akan dicatat terlambat)</span>
                             @endif
                         </span>

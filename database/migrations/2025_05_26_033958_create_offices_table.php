@@ -13,8 +13,10 @@ return new class extends Migration
     {
         Schema::create('offices', function (Blueprint $table) {
             $table->id();
+            $table->string('name', 255);
             $table->double('latitude');
             $table->double('longitude');
+            $table->integer('radius')->default(100);
             $table->timestamps();
             $table->softDeletes();
         });
@@ -28,3 +30,4 @@ return new class extends Migration
         Schema::dropIfExists('offices');
     }
 };
+

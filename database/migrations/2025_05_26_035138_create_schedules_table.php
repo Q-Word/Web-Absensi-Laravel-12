@@ -20,6 +20,8 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
             $table->foreignId('shift_id')->constrained('shifts')->cascadeOnDelete();
             $table->foreignId('office_id')->constrained('offices')->cascadeOnDelete();
+            $table->boolean('is_wfa')->default(false)
+                ->comment('Menandakan apakah jadwal ini adalah WFA (Work From Anywhere) atau tidak');
             $table->timestamps();
         });
     }
